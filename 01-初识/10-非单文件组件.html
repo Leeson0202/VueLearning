@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>非单文件组件</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <h1>第一个 VM</h1> 
+    <div id="root">
+        <!-- 第三步：编写组件标签（使用组件） -->
+        <school></school>
+        <hr>
+        <student></student>
+
+    </div>
+    <br>
+    <hr>
+    <br>
+    <h1>第二个 VM</h1>
+    <div id="root1">
+
+        <!-- 第三步：编写组件标签（使用组件） -->
+        <school></school>
+        <hr>
+        <student></student>
+
+    </div>
+    <script>
+        Vue.config.productionTip = false; // 设置为 false 以阻止 vue 在启动时生成生产提示。
+
+        // 第一步：创建组件
+        const school = Vue.extend({
+            template: `
+            <div>
+            <h3>学校：{{name}}</h3>
+            <h3>地址：{{address}}</h3>
+            </div>
+            `,
+            data() {
+                return {
+                    name: "CQUPT",
+                    address: "重庆市南岸区"
+
+                }
+            }
+        })
+
+        const student = Vue.extend({
+            template: `
+            <div>
+            <h3>学生姓名：{{name}}</h3>
+            <h3>年龄：{{age}}</h3>
+            </div>
+        `,
+            data() {
+                return {
+                    name: "小李",
+                    age: 22
+
+                }
+            }
+        })
+
+
+        // 第二步：注册组件
+        // 全局注册
+        Vue.component("school", school)
+        Vue.component("student", student)
+
+        const vm = new Vue({
+            el: "#root", // el用于指定当前实例为那个容器服务，通常为css选择器字符串
+            // 局部注册
+            // components: {
+            //     school,
+            //     student
+            // }
+        });
+
+        const vm1 = new Vue({
+            el: "#root1",
+        });
+    </script>
+
+</body>
+
+</html>

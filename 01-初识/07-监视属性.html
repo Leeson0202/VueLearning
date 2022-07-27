@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>监视属性 watch</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <p>today's weather is {{isHot.value}}</p>
+        <button @click="changeWeather">switch</button>
+    </div>
+    <script>
+        Vue.config.productionTip = false; // 设置为 false 以阻止 vue 在启动时生成生产提示。
+        const vm = new Vue({
+            el: "#root", // el用于指定当前实例为那个容器服务，通常为css选择器字符串
+            data: {
+                message: "hello Vue",
+                isHot: {
+                    f: true, value: "hot"
+                },
+            },
+            methods: {
+                changeWeather: function () {
+                    this.isHot.f = !this.isHot.f;
+                    this.isHot.value = this.isHot.f ? "hot" : "warm";
+                }
+            },
+            watch: {
+                isHot: {
+                    immediate: true,  // 初始化时就监视
+                    deep: true,// 深度监测
+                    handler(newValue, oldValue) {
+                        console.log("isHot ", newValue.value);
+                    }
+                }
+            }
+        });
+    </script>
+
+</body>
+
+</html>

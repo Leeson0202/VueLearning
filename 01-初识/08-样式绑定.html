@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>样式绑定</title>
+    <script src="../js/vue.js"></script>
+</head>
+<style>
+    .basic {
+        border: 1px solid black;
+        width: 100px;
+        height: 100px;
+    }
+
+    .style1 {
+        background-color: #777;
+    }
+
+    .style2 {
+        border-radius: 10px;
+    }
+</style>
+
+<body>
+    <div id="root">
+        <!-- 对象的方式 -->
+        <div class="basic" :class="objClass">1</div><br>
+        <!-- 字符方式 -->
+        <div class="basic" :class="[style1, style2]">2</div><br>
+        <!-- data方式 -->
+        <div class="basic" :class="{style1:s1,style2:s2}">3</div><br>
+        <!-- 数组方式 -->
+        <div class="basic" :class="classArr">4</div><br>
+        <!-- 内联样式 -->
+        <div class="basic" :style="styleobj">5</div><br>
+        <!-- 内联样式 -->
+        <div class="basic" :style="'border-width: '+border+'px'">6</div><br>
+
+    </div>
+    <script>
+        Vue.config.productionTip = false; // 设置为 false 以阻止 vue 在启动时生成生产提示。
+        const vm = new Vue({
+            el: "#root", // el用于指定当前实例为那个容器服务，通常为css选择器字符串
+            data: {
+                objClass: {
+                    style1: true,
+                    style2: true
+                },
+                style1: "style1",
+                style2: "style2",
+                s1: true,
+                s2: true,
+                classArr: [
+                    "style1", "style2"  
+                ],
+                styleobj: {
+                    backgroundColor: "red",
+                    borderRadius: "5px"
+                },
+                border: "10",
+
+
+            },
+            methods: {
+            },
+        });
+    </script>
+
+</body>
+
+</html>

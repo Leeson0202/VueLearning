@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>模板语法</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <div id="root">
+        <h2>{{message}},时间{{getTime()}}</h2>
+        <a v-bind:href="baidu.url">{{baidu.name}}</a>
+
+    </div>
+
+    <script>
+        Vue.config.productionTip = false; // 设置为 false 以阻止 vue 在启动时生成生产提示。
+        const x = new Vue({
+            el: "#root", // el用于指定当前实例为那个容器服务，通常为css选择器字符串
+            // el: document.getElementById("root"),
+            data: {
+                message: "hello Vue",
+                baidu: {
+                    name: "百度",
+                    url: "http://www.baidu.com"
+                }
+            },
+            methods: {
+                getTime: function () {
+                    return Date.now();
+                }
+            },
+        });
+        
+    </script>
+</body>
+
+</html>

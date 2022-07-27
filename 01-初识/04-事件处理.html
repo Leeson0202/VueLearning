@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>事件处理__v-on</title>
+    <script src="../js/vue.js"></script>
+
+</head>
+
+<body>
+    <div id="root">
+        <p>今天天气{{message==true?" 好热":" 好冷"}}</p>
+        <button v-on:click="change">改变</button>
+    </div>
+    <script>
+        Vue.config.productionTip = false; // 设置为 false 以阻止 vue 在启动时生成生产提示。
+        const vm = new Vue({
+            el: "#root", // el用于指定当前实例为那个容器服务，通常为css选择器字符串
+            data: {
+                message: true
+            },
+            methods: {
+                change: function () {
+                    this.message = !this.message
+                }
+            },
+        });
+    </script>
+</body>
+
+</html>
+
+
+

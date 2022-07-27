@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>条件列表</title>
+    <script src="../js/vue.js"></script>
+</head>
+
+<body>
+    <div id="root">
+        <!-- 条件渲染 -->
+        <h2>条件渲染</h2>
+        <p v-if="hide">{{message1}}</p>
+        <p v-else>{{message2}}</p>
+        <p v-show="show">{{message2}}</p>
+        <!-- 列表渲染 过滤 排序 -->
+        <h2>列表渲染 过滤 排序</h2>
+        <input type="text" v-model="search" placeholder="通过name过滤">
+        <select name="updown" v-model="updown">
+            <option value="0">年龄默认</option>
+            <option value="1">年龄升序</option>
+            <option value="2">年龄降序</option>
+        </select>
+        <ul>
+            <li v-for="(person,index) in getPersons" :key="person.index">
+                <!-- {{person}} -->
+                {{index}}--- {{person.index}} - {{person.name}} - {{person.age}}
+            </li>
+        </ul>
+
+        <!-- 列表排序 -->
+
+
+        <!-- 对象渲染 -->
+        <h2>对象渲染</h2>
+        <ul>
+            <li v-for="val,key,index in car" :key="key">{{index}}:{{key}}:{{val}}</li>
+        </ul>
+
+
+    </div>
+    <script>
+        Vue.config.productionTip = false; // 设置为 false 以阻止 vue 在启动时生成生产提示。
+        const vm = new Vue({
+            el: "#root", // el用于指定当前实例为那个容器服务，通常为css选择器字符串
+            data: {
+                message1: "hello Vue",
+                message2: "hello Java",
+                show: true,
+                hide: false,
+                search: '',
+                persons: [
+                    { index: 1, name: "lue", age: 20 },
+                    { index: 2, name: "hua", age: 22 },
+                    { index: 3, name: "hae", age: 19 },
+                    { index: 4, name: "bea", age: 23 },
+                    { index: 5, name: "ale", age: 21 },
+                ],
+                updown: 0,
+                car: {
+                    name: "福特",
+                    year: 10,
+                    sell: 100
+                }
+            },
+            methods: {
+            },
+            computed: {
+                getPersons() {
+                    const arr = this.persons.filter((p) => {
+                        return p.name.indexOf(this.search) >= 0
+                    })
+                    if (this.updown) {
+                         arr.sort((a, b) => {
+                            return this.updown == 1 ? a.age - b.age : b.age - a.age
+                        })
+                    }
+                    return arr
+                }
+            }
+
+
+        });
+    </script>
+
+</body>
+
+</html>
+
+
+
