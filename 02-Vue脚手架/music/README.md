@@ -1,5 +1,7 @@
 # music
 
+demo [Asedrfa Music](http://music.asedrfa.top)
+
 ## Project setup
 ```
 npm install
