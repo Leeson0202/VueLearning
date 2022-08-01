@@ -1,5 +1,9 @@
 import Music from "@/entry/Music"
 import axios from 'axios'
+import $ from 'jquery'
+
+
+
 
 export default {
     namespaced: true,//开启命名空间
@@ -37,6 +41,34 @@ export default {
                     "pic_str": "109951167576645082",
                     "pic": 109951167576645090
                 },
+                'lrc':
+                    '[00:00.000] 作词 : 刘冠南\
+                    [00:01.000] 作曲 : 刘冠南\
+                    [00:20.48]Hi~\
+                    [00:24.97]怎么那么坏\
+                    [00:31.22]才两天就深爱\
+                    [00:35.95]说得好像真爱\
+                    [00:38.60]我对你说 Hi~\
+                    [00:44.08]今天有没有恋爱\
+                    [00:50.57]是否谈了又甩\
+                    [00:55.32]还说难遇真爱\
+                    [00:58.01]我要你现在\
+                    [01:01.39]把丑事都说出来 Oh\
+                    [01:06.23]才会听你表白\
+                    [01:10.19]听你说你是真的喜欢我\
+                    [01:14.76]真的想谈恋爱了\
+                    [01:19.10]那就让情绪决定\
+                    [01:23.21]听呼吸频率\
+                    [01:26.32]跟感觉旅行\
+                    [01:29.23]大不了不谈感情\
+                    [01:34.02]Just do what I suppose to do\
+                    [01:38.37]你也不用再演戏\
+                    [01:42.14]怪我不爱你\
+                    [01:45.49]是你的决定\
+                    [01:48.47]每句话在我心里\
+                    [01:53.32]清清楚楚地说你想离去\
+                    [01:59.59]'
+                ,
                 "dt": 143406,
                 "h": {
                     "br": 320000,
@@ -145,6 +177,7 @@ export default {
                 context.dispatch("bePlay");
                 return;
             }
+            console.log("not index");
 
             let record = -1;
             // 判断是否在列表中
@@ -153,6 +186,7 @@ export default {
                     record = i;
                 }
             });
+
             // 如果在列表中 移到最前
             if (record !== -1) {
                 let temp = state.music_list.splice(record, 1);
@@ -165,26 +199,55 @@ export default {
                 )
                 return;
             }
-            // 不在列表 请求并 添加到数组前
-            axios.get("http://cloud-music.pl-fe.cn/song/detail/?ids=" + id).then(
-                res => {
-                    // console.log(res.data);
-                    let song = res.data.songs[0];
+            console.log("not in list");
+
+            // 请求得到该Music
+
+            var song = null;
+            // 获取muisc的详细信息
+            $.ajax({
+                url: "http://cloud-music.pl-fe.cn/song/detail/?ids=" + id,
+                cache: false,
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                success: function (data) {
+                    song = data.songs[0];
                     song.src = "http://music.163.com/song/media/outer/url?id=" + id + ".mp3"
-                    state.music_list.unshift(song);
-                    state.index = 0;
-                    // console.log(state.music_list, id);
-                    state.player.src = song.src;
-                    setTimeout(() =>
-                        context.dispatch("bePlay"), 20
-                    )
-                    // this.bePlay();
                 },
-                err => {
-                    console.log(err);
+                error: function (data, errormsg, e) {
+                    console.log(data);
                 }
-            )
+            });
+            // 同步获取 歌词
+            $.ajax({
+                url: "http://cloud-music.pl-fe.cn/lyric?id=" + id,
+                cache: false,
+                dataType: 'json',
+                type: 'get',
+                async: false,
+                success: function (data) {
+                    song.lrc = data.lrc.lyric;
+                },
+                error: function (data, errormsg, e) {
+                    console.log(data);
+                }
+            });
+
+            if (!song) return;
+            
+            console.log("PlayById", song);
+            state.music_list.unshift(song);
+            state.index = 0;
+            // console.log(state.music_list, id);
+            state.player.src = song.src;
+            context.dispatch("bePlay");
+            setTimeout(() => {
+                state.player.pause()
+                state.player.load()
+            }, 10)
         },
+
         // 切换播放状态 播放《=》暂停
         changePlayerState(context) {  // 仅播放
             // console.log("changeAudioPlay", context.state.player.paused);

@@ -151,11 +151,11 @@ export default {
 }
 
 #table-tag {
-    background-color: #fff;
+    background-color: #dddddd;
     border: 1px solid #999;
     width: 100%;
     height: 2.3em;
-    box-shadow: 0px 0px 20px #999 inset;
+    /* box-shadow: 0px 0px 20px #999 inset; */
     color: #333;
 }
 
@@ -176,7 +176,7 @@ td {
 }
 
 tr:nth-child(2n) {
-    background-color: #6e6e6e;
+    background-color: #888;
 }
 
 .first {

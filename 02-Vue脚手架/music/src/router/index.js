@@ -6,6 +6,7 @@ import Login from '../components/Login'
 import Register from '../components/Register'
 import Search from '../pages/Search'
 import Hot from '../pages/Hot'
+import Song from '../pages/Song'
 
 Vue.use(Router)
 
@@ -29,8 +30,17 @@ export default new Router({
                     name: 'hot',
                     path: '/',
                     component: Hot
-
-                }
+                },
+                {
+                    name: 'song',
+                    path: 'song',
+                    component: Song,
+                    props($route) {
+                        return {
+                            id: $route.query.id
+                        }
+                    }
+                },
             ]
         },
         {

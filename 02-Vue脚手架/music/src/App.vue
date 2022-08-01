@@ -29,6 +29,21 @@ html {
   Overflow: hidden
 }
 
+img,
+button,
+span,
+div,
+.unSelect {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+
+  /* 以下两个属性目前并未支持，写在这里为了减少风险 */
+  -o-user-select: none;
+  user-select: none;
+
+}
 
 ::-webkit-scrollbar {
   display: none;

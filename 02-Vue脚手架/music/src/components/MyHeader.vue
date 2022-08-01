@@ -68,7 +68,7 @@ export default {
     background-color: #333;
     position: fixed;
     width: 100%;
-    min-width: 375;
+    min-width: 370px;
     top: 0px;
     height: 52px;
     z-index: 999;

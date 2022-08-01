@@ -5823,7 +5823,8 @@ export default {
    这个 include 指的是组件名
 
    ```html
-   <keep-alive include="News"> 
+   <keep-alive include="News">   <!-- 不写linclude的话 所有都缓存，这里指只缓存组件名为News的组件 -->
+     <!--  <keep-alive :include="['News','Message']">  多个 -->
        <router-view></router-view>
    </keep-alive>
    ```

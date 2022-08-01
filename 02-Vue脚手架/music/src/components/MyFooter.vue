@@ -6,9 +6,18 @@
                     <img id="pre" class="l-btn clc" @click="PreMusic" src="../assets/pre.svg" alt="1">
                     <img id="pause-btn" @click="changePlayerState" class="l-btn  clc " :src="pausedUrl" alt="">
                     <img id="next" class="l-btn clc" @click="NextMusic" src="../assets/next.svg" alt="">
-                    <img class="clc" id="fUrl" :src="music_list[this.index].al.picUrl + '?param=46y46'"
-                        alt="require('../assets/fUrl.svg')">
+                    <router-link :to="{
+                        name: 'song',
+                        query: {
+                            id: music_list[this.index].id,
+                        }
+                    }
+                    ">
+                        <img class="clc" id="fUrl" :src="music_list[this.index].al.picUrl + '?param=46y46'"
+                            alt="require('../assets/fUrl.svg')">
+                    </router-link>
                 </div>
+
 
                 <div class="systemUpdates">
                     <label id="music-name">{{ music_list[index].name }}</label>
@@ -16,9 +25,14 @@
                         <label id="cur-time">{{ timeFormate(this.player.currentTime) }}</label>
                         <label>/</label>
                         <label id="all-time">{{ timeFormate(this.player.duration) }}</label></span>
-                    <div class="progressBar" id="progressBar">
-                        <div class="barContent" :style="{ width: progress }" id="barContent">
+                    <div class="progressBar" @click.prevent.stop="adjustPogress" id="progressBar">
+                        <div class="barContent" :style="{
+                            width: progress + '%'
+                        }" id="barContent">
                         </div>
+                        <div class="progress_btn" :style="{
+                            left: progress - 1 + '%'
+                        }"></div>
                     </div>
                 </div>
 
@@ -35,8 +49,10 @@ export default {
     name: "MyFooter",
     data() {
         return {
-            progress: '0%',
-            pausedUrl: require('../assets/play.svg')
+            progress: 0,
+            playSVG: require('../assets/play.svg'),
+            pauseSVG: require('../assets/pause.svg'),
+            pausedUrl: require('../assets/play.svg'),
         }
     },
     methods: {
@@ -57,15 +73,28 @@ export default {
         updateProgress: function () {
             setInterval(() => {
                 if (!this.player.paused) {
-                    this.progress = (this.player.currentTime / this.player.duration) * 100 + 1 + "%";
-                    this.pausedUrl = require('../assets/pause.svg')
+                    this.progress = (this.player.currentTime / this.player.duration) * 100;
+                    this.pausedUrl = this.pauseSVG;
                 } else {
-
-                    this.pausedUrl = require('../assets/play.svg')
+                    this.pausedUrl = this.playSVG
                 }
 
             }, 100)
         },
+        // 点击调整 进度条
+        adjustPogress(e) {
+            // console.log(e,
+            //     e.offsetX,
+            //     e.offsetY,
+            //     e.target.id,
+            //     document.getElementById("progressBar").offsetWidth
+            // );
+            // 计算占比
+            this.player.currentTime = (e.offsetX / document.getElementById("progressBar").offsetWidth) * this.player.duration
+            this.progress = e.offsetX / document.getElementById("progressBar").offsetWidth * 100
+            // console.log(this.progress*100);
+
+        }
     },
     computed: {
         ...mapState('MusicAbout', ['musics']),
@@ -79,6 +108,7 @@ export default {
         // 将自己的play方法挂在上去
         this.updateProgress(); // 刷新进度条
         this.player.volume = 0.05;
+
     }
 }
 </script>
@@ -88,7 +118,7 @@ export default {
     position: fixed;
     bottom: 0px;
     width: 100%;
-    min-width: 375;
+    min-width: 370px;
     height: 55px;
     background-color: #333;
     align-items: center;
@@ -166,6 +196,7 @@ export default {
     width: 100%;
     height: 5px;
     background: #ccc;
+    cursor: pointer;
     border-radius: 4px;
 }
 
@@ -174,6 +205,18 @@ export default {
     width: 0px;
     background: #777;
     border-radius: 4px;
+}
+
+.progress_btn {
+    width: 10px;
+    height: 10px;
+    position: absolute;
+    bottom: -3px;
+    background-color: #fff;
+    cursor: pointer;
+    border-radius: 50%;
+    /* transform: scale(0); */
+    /*  transition: 0.2s; */
 }
 
 .systemUpdates {

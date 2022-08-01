@@ -2,8 +2,7 @@
     <div id="hot-body">
         <span id="title">推荐音乐</span>
         <div v-resize="resize" id="showTable">
-            <div class="music-detail" v-show="musics.length > 0" v-for="music in musics"
-                :style="{ width: detailWidth + 'px' }" :key="music.id">
+            <div class="music-detail" v-for="music in musics" :style="{ width: detailWidth + 'px' }" :key="music.id">
                 <div class="detail-span" style="margin:auto">
                     <div @click="PlayById(music.id)" class="img-span">
                         <img :src="music.picUrl + '?param=120y120'" alt="">
@@ -12,6 +11,7 @@
                         {{ music.name }}
                     </div>
                 </div>
+                <span v-show="musics.length == 0" style="text-align:center">正在搜索</span>
             </div>
         </div>
         <div style="height:160px"></div>
@@ -39,28 +39,38 @@ export default {
             PreMusic: 'PreMusic',
             NextMusic: 'NextMusic'
         }),
+        //通过v-resize指令 调整music-detail 的宽度
         resize() {
-            console.log("size is change");
-            console.log(document.getElementById("showTable").getBoundingClientRect().width)
+            // console.log("size is change");
+            // console.log(document.getElementById("showTable").getBoundingClientRect().width)
             // 调整宽度
             let Allwidth = document.getElementById("showTable").getBoundingClientRect().width
             let n = Allwidth / 125;
             this.detailWidth = Allwidth / Math.floor(n)
-        }
+        },
+        // 初始化
+        init() {
+            // 搜索
+            axios.get("http://cloud-music.pl-fe.cn/personalized/newsong?limit=40").then(
+                res => {
+                    // console.log(res.data.result);
+                    this.musics = res.data.result
+                    console.log("musics:", this.musics, this.musics.length);
+
+                },
+                err => {
+                    console.log("请连接网络")
+                }
+            )
+
+        },
+
     },
     mounted() {
+        // console.log(this.musics.length);
+        // if (this.musics.length == 0)
+        this.init(); // 初始化
 
-
-        axios.get("http://cloud-music.pl-fe.cn/personalized/newsong?limit=40").then(
-            res => {
-                // console.log(res.data.result);
-                this.musics = res.data.result
-
-            },
-            err => {
-
-            }
-        )
     }
 
 }
